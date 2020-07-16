@@ -1,19 +1,20 @@
 import json
 
-def fizzbuzz(n):
-	"""
-	Compute the correct response for a number based on the 'Fizzbuzz' protocl
+def fizzbuzz(number):
+    """
+    Compute the correct response for a number based on the 'Fizzbuzz' protocl
 
-	Parameters
-	----------
-	n: number, required
-		number to compute 'Fizzbuzz' result for
+    Parameters
+    ----------
+    number: string, required
+        number to compute 'Fizzbuzz' result for
 
-	Output
-	------
-	String
-		'Fizzbuzz' result
-	"""
+    Output
+    ------
+    String
+        'Fizzbuzz' result
+    """
+    n = int(number)
     if n % 3 == 0 and n % 5 == 0:
         return 'FizzBuzz'
     elif n % 3 == 0:
@@ -24,27 +25,27 @@ def fizzbuzz(n):
         return str(n)
 
 def build_response(data):
-	"""
-	Build a valid response object based on the given data
+    """
+    Build a valid response object based on the given data
 
-	Parameters
-	-----------
-	data: dict, required
-		Data to be sent via HTTP response
+    Parameters
+    -----------
+    data: dict, required
+        Data to be sent via HTTP response
         https://docs.aws.amazon.com/apigateway/latest/developerguide/set-up-lambda-proxy-integrations.html
 
-	Output
-	------
-	Dict
-		Formatted lambda response
-	"""
-	return {
-		'statusCode': '200',
-		'body': json.dumps(data),
-		'headers': {
-			'Content-Type': 'application/json',
-		},
-	}
+    Output
+    ------
+    Dict
+        Formatted lambda response
+    """
+    return {
+        'statusCode': '200',
+        'body': json.dumps(data),
+        'headers': {
+            'Content-Type': 'application/json',
+        },
+    }
 
 def lambda_handler(event, context):
     """Lambda call  handler
@@ -68,4 +69,7 @@ def lambda_handler(event, context):
         Return doc: https://docs.aws.amazon.com/apigateway/latest/developerguide/set-up-lambda-proxy-integrations.html
     """
 
-	return build_response(fizzbuzz(event.pathParameters.number))
+    print('RECEIVING CALL')
+    number = event.get('pathParameters').get('number')
+    print('Number: {number}')
+    return build_response(fizzbuzz(event.get('pathParameters').get('number')))
